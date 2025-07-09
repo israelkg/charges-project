@@ -15,6 +15,10 @@
     </div>
 
     {% if charges is not empty %}
+    <a href="{{ path('app_charges_export_csv') }}"
+      class="inline-block px-4 py-2 mx-4 mb-6 bg-blue-600 text-white text-sm font-semibold rounded-md shadow hover:bg-blue-500 transition duration-200">
+      ⬇️ Exportar CSV
+    </a>
       <div class="overflow-x-auto bg-white rounded-2xl shadow border border-gray-200">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
           <thead class="bg-gray-100 text-gray-700 text-xs uppercase">

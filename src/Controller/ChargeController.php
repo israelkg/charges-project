@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use App\Document\Charge;
 use App\Document\Item;
 use App\Form\ChargeForm;
+use App\Document\Charge;
 use App\Repository\ChargeRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-
 
 
 class ChargeController extends AbstractController{
@@ -165,20 +164,19 @@ class ChargeController extends AbstractController{
     }
 
     private function createInstallments(Charge $charge, int $installmentsCount): void{
-    $installmentValue = $charge->getAmount() / $installmentsCount;
+        $installmentValue = $charge->getAmount() / $installmentsCount;
     
-    for ($i = 1; $i <= $installmentsCount; $i++) {
-        $dueDate = (new \DateTimeImmutable())->add(new \DateInterval("P{$i}M"));
+        for ($i = 1; $i <= $installmentsCount; $i++) {
+            $dueDate = (new \DateTimeImmutable())->add(new \DateInterval("P{$i}M"));
         
-        $charge->addInstallment([
-            'number' => $i,
-            'due_date' => $dueDate,
-            'amount' => $installmentValue,
-            'status' => 'PENDENTE'
-        ]);
+            $charge->addInstallment([
+                'number' => $i,
+                'due_date' => $dueDate,
+                'amount' => $installmentValue,
+                'status' => 'PENDENTE'
+            ]);
+        }
     }
-}
-
     private function calculateInstallments(float $amount): array{
         $installments = [];
         $maxInstallments = $this->getMaxInstallments($amount);
@@ -195,7 +193,6 @@ class ChargeController extends AbstractController{
         }
         return $installments;
     }
-
     private function getMaxInstallments(float $amount): int{
         if ($amount >= 1000) return 10;
         if ($amount >= 500) return 6;

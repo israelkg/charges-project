@@ -16,6 +16,12 @@
       <ul class="text-gray-700 space-y-2">
         <li><strong>Nome:</strong> {{ app.user.name }}</li>
         <li><strong>Email:</strong> {{ app.user.email }}</li>
+        <li>
+          <a href="{{ path('app_dashboard_export_pdf') }}"
+            class="inline-block mt-4 px-4 py-2 bg-red-600 text-white font-semibold rounded-md shadow hover:bg-red-500 transition">
+            🖨️ Exportar Dashboard em PDF
+          </a>
+        </li>
       </ul>
     </div>
 
@@ -66,28 +72,28 @@
     <div class="bg-white rounded-xl p-6 shadow-md">
       <h3 class="text-lg font-semibold text-gray-800 mb-4">Status das Cobranças</h3>
       <div class="w-full h-80">
-        <canvas id="chargeStatus"></canvas>
+        <canvas class="graficos" id="chargeStatus"></canvas>
       </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-md">
       <h3 class="text-lg font-semibold text-gray-800 mb-4">Cobranças por Mês</h3>
       <div class="w-full h-80">
-        <canvas id="chargeMonth"></canvas>
+        <canvas class="graficos" id="chargeMonth"></canvas>
       </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-md">
       <h3 class="text-lg font-semibold text-gray-800 mb-4">Receita Acumulada</h3>
       <div class="w-full h-80">
-        <canvas id="recipeAcumulate"></canvas>
+        <canvas class="graficos" id="recipeAcumulate"></canvas>
       </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-md">
       <h3 class="text-lg font-semibold text-gray-800 mb-4">Faixa de Valores</h3>
       <div class="w-full h-80">
-        <canvas id="valueRange"></canvas>
+        <canvas class="graficos" id="valueRange"></canvas>
       </div>
     </div>
   </div>
@@ -98,4 +104,5 @@
   <script src="{{ asset('js/charts/chargeMonth.js') }}"></script>
   <script src="{{ asset('js/charts/recipeAcumulate.js') }}"></script>
   <script src="{{ asset('js/charts/valueRange.js') }}"></script>
+
 {% endblock %}

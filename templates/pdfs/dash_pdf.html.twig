@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 13px;
+            background-color: #f9fafb;
+            color: #1f2937;
+            padding: 40px;
+        }   
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: #1d4ed8;
+            margin-bottom: 32px;
+        }
+
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .info-row {
+            margin-bottom: 6px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #374151;
+            display: inline-block;
+            width: 160px;
+        }
+
+        .value {
+            color: #1f2937;
+        }
+
+        .box {
+            background-color: #f3f4f6;
+            padding: 14px 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .charge-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .charge-table th,
+        .charge-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px 8px;
+            font-size: 13px;
+        }
+
+        .charge-table th {
+            background-color: #f9fafb;
+            text-align: left;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .charge-table td {
+            color: #374151;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📊 Relatório do Dashboard</h1>
+
+    <div class="section">
+        <div class="section-title">👤 Usuário</div>
+        <div class="info-row"><span class="label">Nome:</span> <span class="value">{{ user.name }}</span></div>
+        <div class="info-row"><span class="label">Email:</span> <span class="value">{{ user.email }}</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">📈 Análise Inteligente</div>
+
+        <div class="box"><strong>Faixa de Valores:</strong> Clientes costumam pagar entre <strong>R$101 a R$300</strong>.</div>
+        <div class="box">📈 <strong>Receita Acumulada:</strong> Tendência de aumento contínuo no faturamento mensal.</div>
+        <div class="box">⏰ <strong>Tempo Médio de Pagamento:</strong> Maioria paga até <strong>3 dias após vencimento</strong>.</div>
+        <div class="box">🧾 <strong>Serviço Mais Comum:</strong> <em>[Ex: Assinatura Mensal]</em> tem gerado mais receita.</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">💼 Minhas Cobranças</div>
+        <table class="charge-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Vencimento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for charge in charges %}
+                    <tr>
+                        <td>{{ charge.id }}</td>
+                        <td>{{ charge.descriptioncharge }}</td>
+                        <td>R$ {{ charge.amount|number_format(2, ',', '.') }}</td>
+                        <td>{{ charge.status }}</td>
+                        <td>{{ charge.dueDate|date('d/m/Y') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Relatório gerado automaticamente em {{ "now"|date("d/m/Y H:i") }}
+    </div>
+</div>
+</body>
+</html>
