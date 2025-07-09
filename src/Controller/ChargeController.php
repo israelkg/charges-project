@@ -24,7 +24,7 @@ class ChargeController extends AbstractController{
         $user = $security->getUser();
         $charges = $dm->getRepository(Charge::class)->findBy(['owner' => $user]);
 
-        return $this->render('charge/index.html.twig', [
+        return $this->render('charge/list.html.twig', [
             'charges' => $charges,
         ]);
     }
@@ -36,6 +36,7 @@ class ChargeController extends AbstractController{
         $charge = new Charge();
         $charge->addItem(new Item());
         $charge->setOwner($user); 
+        $charge->setUserId((string) $user->getId());
     
         $form = $this->createForm(ChargeForm::class, $charge);
         $form->handleRequest($request);

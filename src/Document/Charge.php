@@ -22,6 +22,9 @@ class Charge{
 
     #[MongoDB\ReferenceOne(targetDocument: User::class)]
     private ?User $owner = null;
+    
+    #[MongoDB\Field(type: "string")]
+    private string $userId;
 
     // Informações da Cobrança
     #[MongoDB\Field(type: 'float')]
@@ -117,6 +120,13 @@ class Charge{
 
     public function getId(): ?string{
         return $this->id;
+    }
+
+    public function getUserId(): string{
+        return $this->userId;
+    }
+    public function setUserId(string $userId): void{
+        $this->userId = $userId;
     }
 
     public function getOwner(): ?User{

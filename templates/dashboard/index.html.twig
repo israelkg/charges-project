@@ -1,15 +1,101 @@
-<h1>Minhas Cobranças</h1>
+{% extends 'base.html.twig' %}
 
-{% if cobrancas is not empty %}
-    <ul>
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+  
+  <div class="mb-10">
+    <h1 class="text-4xl font-bold text-white mb-2">Olá, {{ app.user.name }} 👋</h1>
+    <p class="text-gray-300 text-lg">Acompanhe seus dados de cobrança e tenha controle total do seu faturamento.</p>
+  </div>
+
+  
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-gray-800">Seu Perfil</h2>
+      <ul class="text-gray-700 space-y-2">
+        <li><strong>Nome:</strong> {{ app.user.name }}</li>
+        <li><strong>Email:</strong> {{ app.user.email }}</li>
+      </ul>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-bold mb-4 text-gray-800">Análise Inteligente</h2>
+      <ul class="text-gray-700 space-y-3 text-sm leading-relaxed">
+        <li>💸 <strong>Faixa de Valores:</strong> Os clientes estão pagando principalmente entre <span class="font-semibold">R$101-300</span>.</li>
+        <li>📈 <strong>Receita Acumulada:</strong> Seu faturamento está <span class="text-green-600 font-semibold">aumentando</span> nos últimos meses.</li>
+        <li>⏱️ <strong>Tempo Médio de Pagamento:</strong> A maioria paga <span class="text-yellow-600 font-semibold">até 3 dias após o vencimento</span>.</li>
+        <li>📦 <strong>Itens/Serviços:</strong> O serviço <span class="font-semibold">[mais comum]</span> tem gerado mais retorno. Avalie priorizá-lo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mb-16">
+    <h2 class="text-2xl font-semibold text-white mb-4">Minhas Cobranças</h2>
+
+    {% if cobrancas is not empty %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for cobranca in cobrancas %}
-            <li>
-                <strong>{{ cobranca.descricao }}</strong> -
-                R$ {{ cobranca.valor }} -
-                Status: {{ cobranca.status }}
-            </li>
+          <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300">
+            <h3 class="text-lg font-semibold mb-2">{{ cobranca.descriptioncharge }}</h3>
+            <p class="text-sm mb-1"><strong>Valor:</strong> R$ {{ cobranca.amount }}</p>
+            <p class="text-sm mb-2">
+              <strong>Status:</strong>
+              {% if cobranca.status == 'pendente' %}
+                <span class="text-yellow-600 font-semibold">Pendente</span>
+              {% elseif cobranca.status == 'paga' %}
+                <span class="text-green-600 font-semibold">Paga</span>
+              {% else %}
+                <span class="text-gray-600">{{ cobranca.status }}</span>
+              {% endif %}
+            </p>
+            <a href="{{ path('app_charges_show', { id: cobranca.id }) }}"
+               class="inline-block mt-3 text-sm font-medium text-blue-600 hover:underline">
+              Ver Detalhes →
+            </a>
+          </div>
         {% endfor %}
-    </ul>
-{% else %}
-    <p>Você ainda não possui cobranças cadastradas.</p>
-{% endif %}
+      </div>
+    {% else %}
+      <p class="text-blue-100">Você ainda não possui cobranças cadastradas.</p>
+    {% endif %}
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+    <div class="bg-white rounded-xl p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Status das Cobranças</h3>
+      <div class="w-full h-80">
+        <canvas id="chargeStatus"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Cobranças por Mês</h3>
+      <div class="w-full h-80">
+        <canvas id="chargeMonth"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Receita Acumulada</h3>
+      <div class="w-full h-80">
+        <canvas id="recipeAcumulate"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Faixa de Valores</h3>
+      <div class="w-full h-80">
+        <canvas id="valueRange"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ asset('js/charts/chargeStatus.js') }}"></script>
+  <script src="{{ asset('js/charts/chargeMonth.js') }}"></script>
+  <script src="{{ asset('js/charts/recipeAcumulate.js') }}"></script>
+  <script src="{{ asset('js/charts/valueRange.js') }}"></script>
+{% endblock %}

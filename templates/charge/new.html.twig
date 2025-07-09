@@ -7,7 +7,6 @@
         <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b pb-2">Criar Nova Cobrança</h1> 
 
         {{ form_start(form, {'attr': {'class': 'space-y-10'}}) }}
-            <!-- Dados da Cobrança -->
             <section>
                 <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     📋 Dados da Cobrança
@@ -24,13 +23,28 @@
                 </div>
             </section>
 
-            <!-- Itens da Cobrança -->
             <section>
                 <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     📦 Itens da Cobrança
                 </h2>
                 <ul id="charge-items" 
-                    data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>{{ form_widget(form.items.vars.prototype)|e('html_attr') }}<button type='button' class='btn btn-danger btn-sm remove-item mt-2'>Remover Item</button></li>" 
+                    data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>
+                                        <div>
+                                            <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___description'>Descrição</label>
+                                            <input type='text' id='charge_form_items___name___description' name='charge_form[items][__name__][description]' required='required' placeholder='Ex: Assinatura Mensal, Consultoria' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                        </div>
+                                        <div class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                                            <div>
+                                                <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___quantity'>Quantidade</label>
+                                                <input type='number' id='charge_form_items___name___quantity' name='charge_form[items][__name__][quantity]' required='required' min='1' step='any' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                            </div>
+                                            <div>
+                                                <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___price'>Preço Unitário</label>
+                                                <input type='number' id='charge_form_items___name___price' name='charge_form[items][__name__][price]' required='required' step='0.01' min='0' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                            </div>
+                                        </div>
+                                        <button type='button' class='remove-item mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded'>Remover Item</button>
+                                    </li>" 
                     data-index="{{ form.items|length }}"
                     class="space-y-4"
                 >
@@ -45,12 +59,11 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <button type="button" class="mt-4 mb-6 inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors duration-200" data-collection-holder-id="charge-items">
+                <button type="button"  class="add-item-link mt-4 mb-6 inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors duration-200" data-collection-holder-id="charge-items">
                     ➕ Adicionar Item
                 </button>
             </section>
 
-            <!-- Dados do Cliente -->
             <section>
                 <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     👤 Dados do Cliente
@@ -63,14 +76,13 @@
                 </div>
             </section>
 
-            <!-- Botão Salvar -->
             <div class="flex justify-end pt-6">
                 {{ form_row(form.save) }}
             </div>
         {{ form_end(form) }}
 
-        <script src="{{ asset('js/mask.js') }}"></script>
-        <script src="{{ asset('js/payment.js') }}"></script>
-        <script src="{{ asset('js/itens.js') }}"></script>
+        <script src="{{ asset('js/utils/mask.js') }}"></script>
+        <script src="{{ asset('js/utils/payment.js') }}"></script>
+        <script src="{{ asset('js/utils/itens.js') }}"></script>
     </div>
 {% endblock %}
