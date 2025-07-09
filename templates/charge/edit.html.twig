@@ -68,6 +68,21 @@
             </div>
         </section>
 
+        <section>   
+            <h2 class="text-lg font-bold text-gray-800">Como essa cobrança será enviada?</h2>
+            <p class="text-sm text-gray-500 mb-3">Selecione uma ou mais opções.</p>
+
+            <div class="flex flex-wrap gap-2">
+                <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="whatsapp">  💬 WhatsApp  </button>
+                <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="email">  📧 E-mail  </button>
+                <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="sms">  📱 SMS  </button>
+            </div>
+
+            <div style="display: none;">
+                {{ form_widget(form.deliveryMethods) }}
+            </div>
+        </section>
+
         <div class="flex justify-end mt-8 space-x-3">
             <a href="{{ path('app_charges_show', {'id': charge.id}) }}"
                class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 shadow">
@@ -86,5 +101,6 @@
     <script src="{{ asset('js/utils/mask.js') }}"></script>
     <script src="{{ asset('js/utils/payment.js') }}"></script>
     <script src="{{ asset('js/utils/itens.js') }}"></script>
+    <script src="{{ asset('js/utils/deliveryMethods.js') }}"></script>
 </div>
 {% endblock %}

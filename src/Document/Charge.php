@@ -109,6 +109,13 @@ class Charge{
     )]
     protected ?string $numberPhone = null;
 
+    #[MongoDB\Field(type: "collection")]
+    #[Assert\All([
+        new Assert\Choice(choices: ['whatsapp', 'email', 'sms'], message: 'Escolha inválida.')
+    ])]
+    private array $deliveryMethods = [];
+
+
 
     public function __construct(){
         $this->status = 'PENDENTE';
@@ -177,6 +184,15 @@ class Charge{
         return $this;
     }
 
+    public function getDeliveryMethods(): array{
+        return $this->deliveryMethods;
+    }
+    public function setDeliveryMethods(array $deliveryMethods): self{
+        $this->deliveryMethods = $deliveryMethods;
+        return $this;
+    }
+
+    
     public function getAmount(): float{
         return $this->amount;
     }

@@ -134,11 +134,24 @@ class ChargeForm extends AbstractType {
                 'required' => true,
                 'attr' => [
                     'maxlength' => 18,
-                    'placeholder' => "(99) 12345-6789 ",
+                    'placeholder' => "(00) 00000-0000 ",
                     'class' => "$inputClass $sectionClass",
                     'inputmode' => 'tel'
                 ],
-            ]);  
+            ])
+            ->add('deliveryMethods', ChoiceType::class, [
+                'choices'  => [
+                    'WhatsApp' => 'whatsapp',
+                    'E-mail' => 'email',
+                    'SMS' => 'sms',
+                ],
+                'expanded' => true, // mostra como botões de radio ou checkbox
+                'multiple' => true, // permite múltiplas seleções
+                'label'    => 'Como essa cobrança será enviada?',
+                'mapped' => true,
+                'required' => false,
+                'attr' => ['class' => 'hidden'], // vamos esconder e controlar com JS + Tailwind
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void {
