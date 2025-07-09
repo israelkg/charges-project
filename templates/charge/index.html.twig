@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listagem de Cobranças{% endblock %}
+
+{% block body %}
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">📄 Listagem de Cobranças</h1>
+            <a href="{{ path('app_charges_new') }}"
+               class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-md shadow hover:bg-green-500 transition duration-200">
+                + Nova Cobrança
+            </a>
+        </div>
+
+        {% if charges is not empty %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-md overflow-hidden">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cliente</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Valor</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vencimento</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Celular</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                            {# <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th> #}
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        {% for charge in charges %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ charge.customerName }}</td>
+                                <td class="px-6 py-4 text-sm text-blue-600 hover:underline">
+                                    <a href="mailto:{{ charge.customerEmail }}">{{ charge.customerEmail }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-green-700 font-bold">R$ {{ charge.amount|number_format(2, ',', '.') }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ charge.dueDate|date('d/m/Y') }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ charge.numberPhone }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    {% if charge.status == 'PAGO' %}
+                                        <span class="inline-flex px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold">PAGO</span>
+                                    {% elseif charge.status == 'PENDENTE' %}
+                                        <span class="inline-flex px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-semibold">PENDENTE</span>
+                                    {% elseif charge.status == 'VENCIDO' %}
+                                        <span class="inline-flex px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold">VENCIDO</span>
+                                    {% else %}
+                                        <span class="inline-flex px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">{{ charge.status }}</span>
+                                    {% endif %}
+                                </td>
+                                {# <td class="px-6 py-4 text-sm text-gray-700">{{ charge.id }}</td> #}
+                                <td class="px-6 py-4 text-right space-x-2">
+                                    <a href="{{ path('app_charges_show', {'id': charge.id}) }}"
+                                       class="inline-block px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded shadow transition">
+                                        Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border border-blue-200 p-4 rounded-md text-blue-900">
+                Nenhuma cobrança encontrada.
+                <a href="{{ path('app_charges_new') }}" class="font-semibold text-blue-700 hover:underline ml-1">Crie sua primeira cobrança agora.</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nova Cobrança{% endblock %}
+
+{% block body %}
+    <div class="bg-white shadow-xl rounded-xl p-8 mb-10 max-w-5xl mx-auto"> 
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b pb-2">Criar Nova Cobrança</h1> 
+
+        {{ form_start(form, {'attr': {'class': 'space-y-10'}}) }}
+            <!-- Dados da Cobrança -->
+            <section>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    📋 Dados da Cobrança
+                </h2>
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                    {{ form_row(form.amount) }}
+                    {{ form_row(form.descriptionCharge) }}
+                    {{ form_row(form.paymentType) }}
+                    {{ form_row(form.installmentsCount, { row_attr: {'class': 'hidden installments-wrapper'} }) }}
+                    <div class="flex gap-6">
+                        {{ form_row(form.dueDate, { row_attr: {'class': 'w-full'} }) }}
+                        {{ form_row(form.paymentMethod, { row_attr: {'class': 'w-full'} }) }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Itens da Cobrança -->
+            <section>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    📦 Itens da Cobrança
+                </h2>
+                <ul id="charge-items" 
+                    data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>{{ form_widget(form.items.vars.prototype)|e('html_attr') }}<button type='button' class='btn btn-danger btn-sm remove-item mt-2'>Remover Item</button></li>" 
+                    data-index="{{ form.items|length }}"
+                    class="space-y-4"
+                >
+                    {% for item in form.items %}
+                        <li class="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-2"> 
+                            {{ form_row(item.description) }}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {{ form_row(item.quantity) }}
+                                {{ form_row(item.price) }}
+                            </div>
+                            <button type="button" class="mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded">Remover Item</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="button" class="mt-4 mb-6 inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors duration-200" data-collection-holder-id="charge-items">
+                    ➕ Adicionar Item
+                </button>
+            </section>
+
+            <!-- Dados do Cliente -->
+            <section>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    👤 Dados do Cliente
+                </h2>
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                    {{ form_row(form.customerName) }}
+                    {{ form_row(form.customerEmail) }}
+                    {{ form_row(form.cpfCnpj) }}
+                    {{ form_row(form.numberPhone) }}
+                </div>
+            </section>
+
+            <!-- Botão Salvar -->
+            <div class="flex justify-end pt-6">
+                {{ form_row(form.save) }}
+            </div>
+        {{ form_end(form) }}
+
+        <script src="{{ asset('js/mask.js') }}"></script>
+        <script src="{{ asset('js/payment.js') }}"></script>
+        <script src="{{ asset('js/itens.js') }}"></script>
+    </div>
+{% endblock %}

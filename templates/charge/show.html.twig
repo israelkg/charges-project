@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalhes da Cobrança #{{ charge.id }}{% endblock %}
+
+{% block body %}
+<div class="bg-white shadow-xl rounded-2xl p-8 space-y-8">
+    <h1 class="text-4xl font-bold text-gray-900 border-b border-gray-200 pb-4">
+        Detalhes da Cobrança <span class="text-blue-600">#{{ charge.id }}</span>
+    </h1>
+
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="space-y-6 col-span-2">
+            <div class="bg-gray-50 p-6 rounded-xl shadow space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">📅 Informações do Cliente</h2>
+                <p class="text-gray-800"><strong class="text-gray-600">Nome:</strong> {{ charge.customerName }}</p>
+                <p class="text-gray-800"><strong class="text-gray-600">Email:</strong> <a href="mailto:{{ charge.customerEmail }}" class="text-blue-600 hover:underline">{{ charge.customerEmail }}</a></p>
+                <p class="text-gray-800"><strong class="text-gray-600">CPF/CNPJ:</strong> {{ charge.cpfCnpj }}</p>
+                <p class="text-gray-800"><strong class="text-gray-600">Celular:</strong> {{ charge.numberPhone }}</p>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">💳 Pagamento</h2>
+                <p class="text-gray-800"><strong class="text-gray-600">Tipo:</strong> {{ charge.paymentType|replace({ 'cash': 'À Vista', 'installment': 'Parcelado', 'subscription': 'Assinatura' }) }}</p>
+                <p class="text-gray-800"><strong class="text-gray-600">Método:</strong> {{ charge.paymentMethod|replace({ 'credit_card': 'Cartão de Crédito', 'boleto': 'Boleto', 'pix': 'PIX' }) }}</p>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">📊 Itens</h2>
+                {% if charge.items is not empty %}
+                    <table class="min-w-full divide-y divide-gray-300 text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="text-left text-gray-600 px-4 py-2">Descrição</th>
+                                <th class="text-left text-gray-600 px-4 py-2">Qtd.</th>
+                                <th class="text-left text-gray-600 px-4 py-2">Preço Unit.</th>
+                                <th class="text-left text-gray-600 px-4 py-2">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            {% for item in charge.items %}
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-800">{{ item.description }}</td>
+                                    <td class="px-4 py-2 text-gray-800">{{ item.quantity }}</td>
+                                    <td class="px-4 py-2 text-gray-800">R$ {{ item.price|number_format(2, ',', '.') }}</td>
+                                    <td class="px-4 py-2 text-gray-800">R$ {{ (item.quantity * item.price)|number_format(2, ',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="text-blue-800 bg-blue-50 border border-blue-200 rounded-md p-4">
+                        Nenhum item registrado nesta cobrança.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-gray-50 p-6 rounded-xl shadow space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">💸 Valores</h2>
+                <p><strong class="text-gray-600">Total:</strong> <span class="text-green-600 font-bold text-xl">R$ {{ charge.amount|number_format(2, ',', '.') }}</span></p>
+                {% if charge.paymentType == 'installment' and charge.installmentsCount %}
+                    {% set parcela = charge.amount / charge.installmentsCount %}
+                    <p class="text-gray-800"><strong class="text-gray-600">Parcelado em:</strong> {{ charge.installmentsCount }}x de R$ {{ parcela|number_format(2, ',', '.') }}</p>
+                {% endif %}
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">🗓️ Datas</h2>
+                <p class="text-gray-800"><strong class="text-gray-600">Criada em:</strong> {{ charge.createdAt|date('d/m/Y H:i') }}</p>
+                <p class="text-gray-800"><strong class="text-gray-600">Vencimento:</strong> {{ charge.dueDate|date('d/m/Y') }}</p>
+                {% if charge.paidAt %}
+                    <p><strong class="text-gray-600">Pago em:</strong> {{ charge.paidAt|date('d/m/Y H:i') }}</p>
+                {% endif %}
+            </div>
+
+            <div class="p-6 rounded-xl shadow 
+                {% if charge.status == 'PAGO' %}bg-green-50 border border-green-200
+                {% elseif charge.status == 'VENCIDO' %}bg-red-50 border border-red-200
+                {% else %}bg-yellow-50 border border-yellow-200{% endif %}">
+                <p><strong class="text-gray-600">Status:</strong>
+                    <span class="ml-2 px-3 py-1 rounded-full text-sm font-semibold 
+                        {% if charge.status == 'PAGO' %}bg-green-100 text-green-800
+                        {% elseif charge.status == 'VENCIDO' %}bg-red-100 text-red-800
+                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {{ charge.status }}
+                    </span>
+                </p>
+                {% if charge.descriptionCharge %}
+                    <p class="mt-2 text-gray-700"><strong>Descrição:</strong> {{ charge.descriptionCharge }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if charge.paymentType == 'installment' and charge.installments|length > 0 %}
+        <div class="mt-10">
+            <h2 class="text-xl font-semibold text-gray-800 mb-3">💶 Parcelas</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-300 shadow rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Nº</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Vencimento</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Valor</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for installment in charge.installments %}
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ installment.number }}/{{ charge.installments|length }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ installment.dueDate|date('d/m/Y') }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">R$ {{ installment.amount|number_format(2, ',', '.') }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full 
+                                        {% if installment.status == 'PAGO' %}bg-green-100 text-green-800
+                                        {% elseif installment.status == 'VENCIDO' %}bg-red-100 text-red-800
+                                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                        {{ installment.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mt-10 flex flex-wrap justify-end gap-3">
+        <a href="{{ path('app_charges_list') }}" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
+            ← Voltar para lista
+        </a>
+        <a href="{{ path('app_charges_edit', {'id': charge.id}) }}" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600">
+            ✏️ Editar Cobrança
+        </a>
+        {% if charge.status != 'PAGO' %}
+            <a class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-green-600 hover:bg-green-700">
+                💰 Registrar Pagamento
+            </a>
+        {% endif %}
+        <form method="post" action="{{ path('app_charges_delete', {'id': charge.id}) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta cobrança?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ charge.id) }}">
+            <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium text-white bg-red-600 hover:bg-red-700">
+                🗑️ Excluir Cobrança
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

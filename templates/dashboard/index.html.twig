@@ -1,0 +1,15 @@
+<h1>Minhas Cobranças</h1>
+
+{% if cobrancas is not empty %}
+    <ul>
+        {% for cobranca in cobrancas %}
+            <li>
+                <strong>{{ cobranca.descricao }}</strong> -
+                R$ {{ cobranca.valor }} -
+                Status: {{ cobranca.status }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Você ainda não possui cobranças cadastradas.</p>
+{% endif %}

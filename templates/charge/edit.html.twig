@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Cobrança #{{ charge.id }}{% endblock %}
+
+{% block body %}
+<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        ✏️ Editar Cobrança <span class="text-blue-600">#{{ charge.id }}</span>
+    </h1>
+
+    {{ form_start(form, {'attr': {'class': 'space-y-8'}}) }}
+
+        <section>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                📋 Dados da Cobrança
+            </h2>
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                {{ form_row(form.amount) }}
+                {{ form_row(form.descriptionCharge) }}
+                {{ form_row(form.paymentType) }}
+                {{ form_row(form.installmentsCount, { row_attr: {'class': 'hidden installments-wrapper'} }) }}
+                <div class="flex flex-col md:flex-row gap-6">
+                    {{ form_row(form.dueDate, {'row_attr': {'class': 'w-full'}}) }}
+                    {{ form_row(form.paymentMethod, {'row_attr': {'class': 'w-full'}}) }}
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 flex items-center gap-2">📦 Itens da Cobrança</h2>
+            <ul id="charge-items" 
+                data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}"
+                data-index="{{ form.items|length }}"
+                class="space-y-4"
+            >
+                {% for item in form.items %}
+                    <li class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                        {{ form_widget(item.id) }}
+
+                        {{ form_row(item.description, {'row_attr': {'class': 'mb-4'}}) }}
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {{ form_row(item.quantity) }}
+                            {{ form_row(item.price) }}
+                        </div>
+
+                        <button type="button" class="remove-item mt-3 inline-block px-4 py-2 bg-red-600 text-white text-sm font-medium rounded shadow hover:bg-red-500 transition">
+                            Remover Item
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <button type="button"
+                    class="mt-4 mb-6 inline-block px-4 py-2 bg-green-600 text-white text-sm font-medium rounded shadow hover:bg-green-500 transition add-item-link"
+                    data-collection-holder-id="charge-items">
+                + Adicionar Item
+            </button>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">🙍‍♂️ Dados do Cliente</h2>
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                {{ form_row(form.customerName) }}
+                {{ form_row(form.customerEmail) }}
+                {{ form_row(form.cpfCnpj) }}
+                {{ form_row(form.numberPhone) }}
+            </div>
+        </section>
+
+        <div class="flex justify-end mt-8 space-x-3">
+            <a href="{{ path('app_charges_show', {'id': charge.id}) }}"
+               class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 shadow">
+                Cancelar
+            </a>
+            {{ form_row(form.save, {
+                'label': 'Salvar Alterações',
+                'attr': {
+                    'class': 'inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                }
+            }) }}
+        </div>
+
+    {{ form_end(form) }}
+
+    <script src="{{ asset('js/mask.js') }}"></script>
+    <script src="{{ asset('js/payment.js') }}"></script>
+    <script src="{{ asset('js/itens.js') }}"></script>
+</div>
+{% endblock %}

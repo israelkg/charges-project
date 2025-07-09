@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Criar Conta{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        <div class="max-w-md mx-auto mt-40 p-8 bg-white rounded-2xl shadow-lg">
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">Criar Conta</h1>
+            {{ form_row(form.name) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password) }}
+            {{ form_row(form.submit, {'attr': {'class': 'w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300'}}) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

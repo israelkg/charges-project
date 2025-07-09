@@ -1,0 +1,22 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+/log/
+/*.log
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.phpunit.result.cache
+*.mongodb
+*.sqlite
+.phpunit.cache/
+composer.phar
+.symfony
+###< symfony/framework-bundle ###
