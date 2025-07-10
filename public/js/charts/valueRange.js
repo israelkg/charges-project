@@ -1,42 +1,58 @@
 var ctx = document.getElementById('valueRange').getContext('2d');
 
 const dataV =  {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [{
+    labels: [],
+    datasets: [
+      {
         label: 'R$0-100',
-        data: [12, 19, 3, 5, 2, 3],
+        data: [],
         backgroundColor: '#228B22',
         borderColor: 'black',
         borderWidth: 1,
       },
       {
         label: 'R$101-300',
-        data: [2, 10, 15, 10, 15, 10],
+        data: [],
         backgroundColor: '#FFFF00',
         borderColor: 'black',
         borderWidth: 1,
       },
       {
         label: 'R$301-500',
-        data: [10, 15, 10, 15, 10, 15],
+        data: [],
         backgroundColor: '#FFA500',
         borderColor: 'black',
         borderWidth: 1,
       },
       {
         label: 'R$501-1000',
-        data: [5, 10, 7, 9, 8, 6],
+        data: [],
+        backgroundColor: '#D2691E',
+        borderColor: 'black',
+        borderWidth: 1,
+      },
+      {
+        label: 'R$1001-2000',
+        data: [],
+        backgroundColor: '#EE82EE',
+        borderColor: 'black',
+        borderWidth: 1,
+      },
+      {
+        label: 'R$2001-5000',
+        data: [],
         backgroundColor: '#B22222',
         borderColor: 'black',
         borderWidth: 1,
-      },]
+      }
+    ]
 }
 
 const valueRange = new Chart(ctx, {
     type: 'bar',
     data: dataV,
     options: {
-        resposive: true,
+        responsive: true,
         maintainAspectRatio: false,
         plugins: {
             title: {
@@ -69,5 +85,31 @@ const valueRange = new Chart(ctx, {
                 intersect: false,
             },
         },
+        scales: {
+          x: {
+            stacked: true
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true
+          }
+        }
     }
 })
+
+fetch('api/dashboard/dados-cobrancas')
+  .then(response => response.json())
+  .then(dados => {
+    console.log('Dados faixa valor:', dados);
+
+    dataV.labels = dados.faixas.labels;
+    dataV.datasets[0].data = dados.faixas["0-100"];
+    dataV.datasets[1].data = dados.faixas["101-300"];
+    dataV.datasets[2].data = dados.faixas["301-500"];
+    dataV.datasets[3].data = dados.faixas["501-1000"];
+    dataV.datasets[4].data = dados.faixas["1001-2000"];
+    dataV.datasets[5].data = dados.faixas["2001-5000"];
+
+    valueRange.update();
+  })
+  .catch(error => console.error('Erro ao buscar dados faixa valor:', error));

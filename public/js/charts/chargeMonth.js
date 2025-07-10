@@ -1,33 +1,38 @@
 var ctx = document.getElementById('chargeMonth').getContext('2d');
 
-const dataM =  {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [{
-        label: 'Pagas',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: ['#228B22'],
-        borderColor: 'black',
-        borderWidth: 1,
-    },{
-        label: 'Pendentes',
-        data: [2, 10, 15, 10, 15, 10],
-        backgroundColor: ['#FFD700'],
-        borderColor: 'black',
-        borderWidth: 1,
-    },{
-        label: 'Vencidas',
-        data: [10, 15, 10, 15, 10, 15],
-        backgroundColor: ['#B22222	'],
-        borderColor: 'black',
-        borderWidth: 1,
-    }]
-}
+// Estrutura inicial do gráfico com dados vazios
+const dataM = {
+    labels: [],
+    datasets: [
+        {
+            label: 'Pagas',
+            data: [],
+            backgroundColor: ['#228B22'],
+            borderColor: 'black',
+            borderWidth: 1,
+        },
+        {
+            label: 'Pendentes',
+            data: [],
+            backgroundColor: ['#FFD700'],
+            borderColor: 'black',
+            borderWidth: 1,
+        },
+        {
+            label: 'Vencidas',
+            data: [],
+            backgroundColor: ['#B22222'],
+            borderColor: 'black',
+            borderWidth: 1,
+        }
+    ]
+};
 
 const chargeMonth = new Chart(ctx, {
     type: 'bar',
     data: dataM,
     options: {
-        resposive: true,
+        responsive: true,
         maintainAspectRatio: false,
         plugins: {
             title: {
@@ -57,7 +62,6 @@ const chargeMonth = new Chart(ctx, {
                 }
             }
         },
-        // se quiser bar normal, tire essa parte de scales
         scales: {
             x: {
                 stacked: true,
@@ -67,4 +71,17 @@ const chargeMonth = new Chart(ctx, {
             }
         }
     }
-})
+});
+
+// Busca os dados do backend e atualiza o gráfico
+fetch('api/dashboard/dados-cobrancas')
+    .then(response => response.json())
+    .then(dados => {
+        console.log(dados); // debug
+        dataM.labels = dados.labels;
+        dataM.datasets[0].data = dados.pagas;
+        dataM.datasets[1].data = dados.pendentes;
+        dataM.datasets[2].data = dados.vencidas;
+        chargeMonth.update();
+    })
+    .catch(error => console.error('Erro ao buscar dados do gráfico:', error));

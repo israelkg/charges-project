@@ -12,7 +12,7 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
                         📋 Dados da Cobrança
                     </h2>
-                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4 dark:bg-gray-100">
                         {{ form_row(form.amount) }}
                         {{ form_row(form.descriptionCharge) }}
                         {{ form_row(form.paymentType) }}
@@ -26,7 +26,7 @@
 
                 <div>
                     <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">  📦 Itens da Cobrança  </h2>
-                    <ul id="charge-items" 
+                    <ul id="charge-items" class="dark:bg-gray-100"
                         data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>
                                             <div>
                                                 <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___description'>Descrição</label>
@@ -69,7 +69,7 @@
             <section id="step-2" class="hidden">
                 <div class="dados-cliente">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">  👤 Dados do Cliente  </h2>
-                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4 dark:bg-gray-100">
                         {{ form_row(form.customerName) }}
                         {{ form_row(form.customerEmail) }}
                         {{ form_row(form.cpfCnpj) }}
