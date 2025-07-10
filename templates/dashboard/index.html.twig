@@ -9,11 +9,34 @@
     <p class="dark:text-gray-100 text-gray-700 text-lg">Acompanhe seus dados de cobrança e tenha controle total do seu faturamento.</p>
   </div>
 
-  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="dark:bg-gray-800 bg-gray-100 rounded-2xl p-6 shadow-md flex items-center gap-4">
+      <div class="bg-blue-600 text-white p-4 rounded-full"> 📩 </div>
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">1.245</h3>
+        <p class="text-gray-700 dark:text-gray-100 text-sm">Cobranças Emitidas</p>
+      </div>
+    </div>
+    <div class="dark:bg-gray-800 bg-gray-100 rounded-2xl p-6 shadow-md flex items-center gap-4">
+      <div class="bg-red-600 dark:text-white text-gray-800 p-4 rounded-full"> 📂 </div>
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">34</h3>
+        <p class="text-gray-700 dark:text-gray-100 text-sm">Cobranças Atrasadas</p>
+      </div>
+    </div>
+    <div class="dark:bg-gray-800 bg-gray-100 rounded-2xl p-6 shadow-md flex items-center gap-4">
+      <div class="bg-green-600 text-white p-4 rounded-full"> 👤 </div>
+      <div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">5.245</h3>
+        <p class="text-gray-700 dark:text-gray-100 text-sm">Total de Clientes</p>
+      </div>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-    <div class="bg-white p-6 rounded-2xl shadow-lg dark:bg-gray-100">
-      <h2 class="text-xl font-bold mb-4 text-gray-800">Seu Perfil</h2>
-      <ul class="text-gray-700 space-y-2">
+    <div class="bg-gray-100 p-6 rounded-2xl shadow-lg dark:bg-gray-800">
+      <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Seu Perfil</h2>
+      <ul class="text-gray-800 dark:text-gray-100 space-y-2">
         <li><strong>Nome:</strong> {{ app.user.name }}</li>
         <li><strong>Email:</strong> {{ app.user.email }}</li>
         <li>
@@ -25,9 +48,9 @@
       </ul>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-lg dark:bg-gray-100">
-      <h2 class="text-xl font-bold mb-4 text-gray-800">Análise Inteligente</h2>
-      <ul class="text-gray-700 space-y-3 text-sm leading-relaxed">
+    <div class="bg-gray-100 p-6 rounded-2xl shadow-lg dark:bg-gray-800">
+      <h2 class="text-xl font-bold mb-4 text-gray-800 text-gray-100">Análise Inteligente</h2>
+      <ul class="text-gray-800 dark:text-gray-100 space-y-3 text-sm leading-relaxed">
         <li>💸 <strong>Faixa de Valores:</strong> Os clientes estão pagando principalmente entre <span class="font-semibold">R$101-300</span>.</li>
         <li>📈 <strong>Receita Acumulada:</strong> Seu faturamento está <span class="text-green-600 font-semibold">aumentando</span> nos últimos meses.</li>
         <li>⏱️ <strong>Tempo Médio de Pagamento:</strong> A maioria paga <span class="text-yellow-600 font-semibold">até 3 dias após o vencimento</span>.</li>
@@ -37,12 +60,12 @@
   </div>
 
   <div class="mb-16">
-    <h2 class="text-2xl font-semibold dark:text-gray-100 text-gray-700 mb-4">Minhas Cobranças</h2>
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4 text-gray-100">Minhas Cobranças</h2>
 
     {% if cobrancas is not empty %}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for cobranca in cobrancas %}
-          <div class="bg-white text-gray-800 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 dark:bg-gray-100">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for cobranca in cobrancas|slice(0, 4) %}
+          <div class="bg-gray-100 dark:text-gray-200 text-gray-800 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 dark:bg-gray-800">
             <h3 class="text-lg font-semibold mb-2">{{ cobranca.descriptioncharge }}</h3>
             <p class="text-sm mb-1"><strong>Valor:</strong> R$ {{ cobranca.amount }}</p>
             <p class="text-sm mb-2">
@@ -68,34 +91,21 @@
   </div>
 
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-    <div class="bg-white rounded-xl p-6 shadow-md dark:bg-gray-100">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Status das Cobranças</h3>
-      <div class="w-full h-80">
-        <canvas class="graficos" id="chargeStatus"></canvas>
-      </div>
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-20">
+    {% set cards = [
+      {'id': 'chargeStatus'},
+      {'id': 'chargeMonth'},
+      {'id': 'recipeAcumulate'},
+      {'id': 'valueRange'}
+    ] %}
 
-    <div class="bg-white rounded-xl p-6 shadow-md dark:bg-gray-100">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Cobranças por Mês</h3>
-      <div class="w-full h-80">
-        <canvas class="graficos" id="chargeMonth"></canvas>
+    {% for card in cards %}
+      <div class="dark:bg-gray-200 bg-gray-100 rounded-2xl p-6 shadow-md hover:shadow-lg transition-colors duration-300">
+        <div class="w-full h-80 flex items-center justify-center">
+          <canvas class="graficos" id="{{ card.id }}"></canvas>
+        </div>
       </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-md dark:bg-gray-100">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Receita Acumulada</h3>
-      <div class="w-full h-80">
-        <canvas class="graficos" id="recipeAcumulate"></canvas>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-md dark:bg-gray-100">
-      <h3 class="text-lg font-semibold text-gray-800 mb-4">Faixa de Valores</h3>
-      <div class="w-full h-80">
-        <canvas class="graficos" id="valueRange"></canvas>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 
 
