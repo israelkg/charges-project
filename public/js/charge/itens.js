@@ -45,16 +45,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const paymentTypeRadios = document.querySelectorAll('.payment-type-radio');
     const amountInput = document.querySelector('[data-payment-type-target="amountInput"]');
 
-    paymentTypeRadios.forEach(radio => {
-        radio.addEventListener('change', function () {
-            if (this.value === 'installment') {
-                amountInput.min = 20;
-                if (parseFloat(amountInput.value) < 20) {
-                    amountInput.value = 20.00;
+    
+    if (amountInput) {
+        paymentTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === 'installment') {
+                    amountInput.min = 20;
+                    if (parseFloat(amountInput.value) < 20) {
+                        amountInput.value = 20.00;
+                    }
+                } else {
+                    amountInput.min = 0.01;
                 }
-            } else {
-                amountInput.min = 0.01;
-            }
+            });
         });
-    });
+    }
 });

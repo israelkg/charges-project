@@ -7,95 +7,110 @@
         <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b pb-2">Criar Nova Cobrança</h1> 
 
         {{ form_start(form, {'attr': {'class': 'space-y-10'}}) }}
-            <section>
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    📋 Dados da Cobrança
-                </h2>
-                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
-                    {{ form_row(form.amount) }}
-                    {{ form_row(form.descriptionCharge) }}
-                    {{ form_row(form.paymentType) }}
-                    {{ form_row(form.installmentsCount, { row_attr: {'class': 'hidden installments-wrapper'} }) }}
-                    <div class="flex gap-6">
-                        {{ form_row(form.dueDate, { row_attr: {'class': 'w-full'} }) }}
-                        {{ form_row(form.paymentMethod, { row_attr: {'class': 'w-full'} }) }}
+            <section id="step-1">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        📋 Dados da Cobrança
+                    </h2>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                        {{ form_row(form.amount) }}
+                        {{ form_row(form.descriptionCharge) }}
+                        {{ form_row(form.paymentType) }}
+                        {{ form_row(form.installmentsCount, { row_attr: {'class': 'hidden installments-wrapper'} }) }}
+                        <div class="flex gap-6">
+                            {{ form_row(form.dueDate, { row_attr: {'class': 'w-full'} }) }}
+                            {{ form_row(form.paymentMethod, { row_attr: {'class': 'w-full'} }) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">  📦 Itens da Cobrança  </h2>
+                    <ul id="charge-items" 
+                        data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>
+                                            <div>
+                                                <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___description'>Descrição</label>
+                                                <input type='text' id='charge_form_items___name___description' name='charge_form[items][__name__][description]' required='required' placeholder='Ex: Assinatura Mensal, Consultoria' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                            </div>
+                                            <div class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                                                <div>
+                                                    <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___quantity'>Quantidade</label>
+                                                    <input type='number' id='charge_form_items___name___quantity' name='charge_form[items][__name__][quantity]' required='required' min='1' step='any' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                                </div>
+                                                <div>
+                                                    <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___price'>Preço Unitário</label>
+                                                    <input type='number' id='charge_form_items___name___price' name='charge_form[items][__name__][price]' required='required' step='0.01' min='0' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
+                                                </div>
+                                            </div>
+                                            <button type='button' class='remove-item mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded'>Remover Item</button>
+                                        </li>" 
+                        data-index="{{ form.items|length }}"
+                        class="space-y-4"
+                    >
+                        {% for item in form.items %}
+                            <li class="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-2"> 
+                                {{ form_row(item.description) }}
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {{ form_row(item.quantity) }}
+                                    {{ form_row(item.price) }}
+                                </div>
+                                <button type="button" class="mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded">Remover Item</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="button"  class="add-item-link mt-4 mb-6 inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors duration-200" data-collection-holder-id="charge-items">  ➕ Adicionar Item  </button>
+                </div>
+
+                <div class="flex justify-end pt-6 space-x-5">
+                    <button type="button" id="next-step" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">  Avançar  </button>
+                </div>
+            </section>
+
+            <section id="step-2" class="hidden">
+                <div class="dados-cliente">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">  👤 Dados do Cliente  </h2>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                        {{ form_row(form.customerName) }}
+                        {{ form_row(form.customerEmail) }}
+                        {{ form_row(form.cpfCnpj) }}
+                        {{ form_row(form.numberPhone) }}
+                    </div>
+                </div>
+
+                <div class="my-8">
+                    <h2 class="text-lg font-bold text-gray-800">Como essa cobrança será enviada?</h2>
+                    <p class="text-sm text-gray-500 mb-3">Selecione uma ou mais opções.</p>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="whatsapp">  💬 WhatsApp  </button>
+                        <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="email">  📧 E-mail  </button>
+                        <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="sms">  📱 SMS  </button>
+                    </div>
+
+                    <div style="display: none;">
+                        {{ form_widget(form.deliveryMethods) }}
+                    </div>
+                </div>
+                
+                <div class="w-full pt-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <button type="button" id="back-step" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">  Voltar  </button>
+                        </div>
+
+                        <div class="flex space-x-4">
+                            {{ form_row(form.save) }}
+                            {{ form_row(form.save_and_send) }}
+                        </div>
                     </div>
                 </div>
             </section>
-
-            <section>
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                    📦 Itens da Cobrança
-                </h2>
-                <ul id="charge-items" 
-                    data-prototype="<li class='bg-gray-50 p-4 rounded-md border border-gray-200 mb-4'>
-                                        <div>
-                                            <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___description'>Descrição</label>
-                                            <input type='text' id='charge_form_items___name___description' name='charge_form[items][__name__][description]' required='required' placeholder='Ex: Assinatura Mensal, Consultoria' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
-                                        </div>
-                                        <div class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                                            <div>
-                                                <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___quantity'>Quantidade</label>
-                                                <input type='number' id='charge_form_items___name___quantity' name='charge_form[items][__name__][quantity]' required='required' min='1' step='any' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
-                                            </div>
-                                            <div>
-                                                <label class='text-black mb-1 block font-medium required' for='charge_form_items___name___price'>Preço Unitário</label>
-                                                <input type='number' id='charge_form_items___name___price' name='charge_form[items][__name__][price]' required='required' step='0.01' min='0' class='block w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mb-2' />
-                                            </div>
-                                        </div>
-                                        <button type='button' class='remove-item mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded'>Remover Item</button>
-                                    </li>" 
-                    data-index="{{ form.items|length }}"
-                    class="space-y-4"
-                >
-                    {% for item in form.items %}
-                        <li class="bg-gray-50 p-4 rounded-md border border-gray-200 space-y-2"> 
-                            {{ form_row(item.description) }}
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {{ form_row(item.quantity) }}
-                                {{ form_row(item.price) }}
-                            </div>
-                            <button type="button" class="mt-2 text-white bg-red-700 hover:bg-red-500 transition-colors duration-200 px-4 py-2 rounded">Remover Item</button>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <button type="button"  class="add-item-link mt-4 mb-6 inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors duration-200" data-collection-holder-id="charge-items">  ➕ Adicionar Item  </button>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">  👤 Dados do Cliente  </h2>
-                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
-                    {{ form_row(form.customerName) }}
-                    {{ form_row(form.customerEmail) }}
-                    {{ form_row(form.cpfCnpj) }}
-                    {{ form_row(form.numberPhone) }}
-                </div>
-            </section>
-
-            <section>   
-                <h2 class="text-lg font-bold text-gray-800">Como essa cobrança será enviada?</h2>
-                <p class="text-sm text-gray-500 mb-3">Selecione uma ou mais opções.</p>
-
-                <div class="flex flex-wrap gap-2">
-                    <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="whatsapp">  💬 WhatsApp  </button>
-                    <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="email">  📧 E-mail  </button>
-                    <button type="button" class="btn-envio px-4 py-2 border border-blue-600 rounded-full text-blue-600 hover:bg-blue-600 hover:text-white transition" data-method="sms">  📱 SMS  </button>
-                </div>
-
-                <div style="display: none;">
-                    {{ form_widget(form.deliveryMethods) }}
-                </div>
-            </section>
-
-            <div class="flex justify-end pt-6">
-                {{ form_row(form.save) }}
-                {{ form_row(form.save_and_send) }}
-            </div>
         {{ form_end(form) }}
 
         <script src="{{ asset('js/utils/mask.js') }}"></script>
-        <script src="{{ asset('js/utils/payment.js') }}"></script>
-        <script src="{{ asset('js/utils/itens.js') }}"></script>
-        <script src="{{ asset('js/utils/deliveryMethods.js') }}"></script>
+        <script src="{{ asset('js/charge/payment.js') }}"></script>
+        <script src="{{ asset('js/charge/itens.js') }}"></script>
+        <script src="{{ asset('js/charge/form.js') }}"></script>    
+        <script src="{{ asset('js/charge/deliveryMethods.js') }}"></script>
     </div>
 {% endblock %}
