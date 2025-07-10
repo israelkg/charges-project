@@ -4,7 +4,7 @@ const dataS =  {
     labels: ['Pagas', 'Pendentes', 'Vencidas'],
   datasets: [{
     data: [35, 20, 15], // somatório das cobranças de cada status
-    backgroundColor: ['#00FF00', '#FFFF00', '#FF4500'],
+    backgroundColor: ['#228B22', '#FFD700', '#B22222'],
     borderColor: 'black',
     borderWidth: 1
   }]

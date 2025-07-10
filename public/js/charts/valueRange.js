@@ -5,7 +5,7 @@ const dataV =  {
     datasets: [{
         label: 'R$0-100',
         data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: '#00FF00',
+        backgroundColor: '#228B22',
         borderColor: 'black',
         borderWidth: 1,
       },
@@ -26,7 +26,7 @@ const dataV =  {
       {
         label: 'R$501-1000',
         data: [5, 10, 7, 9, 8, 6],
-        backgroundColor: '#FF4500',
+        backgroundColor: '#B22222',
         borderColor: 'black',
         borderWidth: 1,
       },]

@@ -6,6 +6,7 @@ use App\Document\Item;
 use App\Form\ChargeForm;
 use App\Document\Charge;
 use App\Repository\ChargeRepository;
+use App\Service\ChargeDeliveryService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,7 @@ class ChargeController extends AbstractController{
 
 
     #[Route('/charges/new', name: 'app_charges_new')]
-    public function new(Request $request, DocumentManager $dm, Security $security): Response{
+    public function new(Request $request, DocumentManager $dm, Security $security, ChargeDeliveryService $deliveryService): Response{
         $user = $security->getUser();
         $charge = new Charge();
         $charge->addItem(new Item());
@@ -57,6 +58,13 @@ class ChargeController extends AbstractController{
                 $charge->setCreatedAt(new \DateTimeImmutable());
                 $dm->persist($charge);
                 $dm->flush();
+
+                if ($form->get('save_and_send')->isClicked()) {
+                    $deliveryService->dispatchDelivery($charge);
+                    $this->addFlash('success', 'Cobrança salva e enviada com sucesso!');
+                } else {
+                    $this->addFlash('success', 'Cobrança salva com sucesso!');
+                }
 
                 $this->addFlash('success', 'Cobrança criada com sucesso!');
                 return $this->redirectToRoute('app_charges_show', ['id' => $charge->getId()]);
@@ -198,5 +206,14 @@ class ChargeController extends AbstractController{
         if ($amount >= 500) return 6;
         if ($amount >= 200) return 5;
         return 1;
+    }
+
+    // DELIVERY
+    #[Route('/charge/send/{id}', name: 'app_charge_send')]
+    public function send( Charge $charge, ChargeDeliveryService $deliveryService ): Response {
+        $deliveryService->dispatchDelivery($charge);
+
+        $this->addFlash('success', 'Cobrança enviada com sucesso');
+        return $this->redirectToRoute('app_charges_list');
     }
 }

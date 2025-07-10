@@ -5,19 +5,19 @@ const dataM =  {
     datasets: [{
         label: 'Pagas',
         data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: ['#00FF00'],
+        backgroundColor: ['#228B22'],
         borderColor: 'black',
         borderWidth: 1,
     },{
         label: 'Pendentes',
         data: [2, 10, 15, 10, 15, 10],
-        backgroundColor: ['#FFFF00'],
+        backgroundColor: ['#FFD700'],
         borderColor: 'black',
         borderWidth: 1,
     },{
         label: 'Vencidas',
         data: [10, 15, 10, 15, 10, 15],
-        backgroundColor: ['#FF4500'],
+        backgroundColor: ['#B22222	'],
         borderColor: 'black',
         borderWidth: 1,
     }]

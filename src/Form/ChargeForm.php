@@ -100,6 +100,10 @@ class ChargeForm extends AbstractType {
                     'class' => 'w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200'
                 ]
             ])
+            ->add('save_and_send', SubmitType::class, [
+                'label' => 'Criar e Enviar',
+                'attr' => ['class' => 'w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200']
+            ])
 
 
             ->add('customerName', TextType::class, [
