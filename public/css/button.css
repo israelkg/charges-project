@@ -1,0 +1,206 @@
+/* TRASH */
+.bin-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    border-radius: 15px;
+    background-color: rgb(255, 95, 95);
+    cursor: pointer;
+    border: 3px solid rgb(255, 201, 201);
+    transition-duration: 0.3s;
+}
+.bin-bottom {
+    width: 15px;
+}
+.bin-top {
+    width: 17px;
+    transform-origin: right;
+    transition-duration: 0.3s;
+}
+.bin-button:hover .bin-top {
+    transform: rotate(45deg);
+}
+.bin-button:hover {
+    background-color: rgb(255, 0, 0);
+    transform: scale(1.1);
+}
+.bin-button:active {
+    transform: scale(0.9);
+}
+  
+
+/* EDIT */
+.editBtn {
+    width: 55px;
+    height: 55px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(93, 93, 116);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+.editBtn::before {
+    content: "";
+    width: 200%;
+    height: 200%;
+    background-color: rgb(102, 102, 141);
+    position: absolute;
+    z-index: 1;
+    transform: scale(0);
+    transition: all 0.3s;
+    border-radius: 50%;
+    filter: blur(10px);
+}
+.editBtn:hover::before {
+    transform: scale(1);
+}
+.editBtn:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+    transform: scale(1.1);
+}
+  
+.editBtn svg {
+    height: 17px;
+    fill: white;
+    z-index: 3;
+    transition: all 0.2s;
+    transform-origin: bottom;
+}
+.editBtn:hover svg {
+    transform: rotate(-15deg) translateX(5px);
+}
+.editBtn::after {
+    content: "";
+    width: 25px;
+    height: 1.5px;
+    position: absolute;
+    bottom: 19px;
+    left: -5px;
+    background-color: white;
+    border-radius: 2px;
+    z-index: 2;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease-out;
+}
+.editBtn:hover::after {
+    transform: scaleX(1);
+    left: 0px;
+    transform-origin: right;
+}
+  
+
+/* NOTIFICAÇÃO */
+.button {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition-duration: .3s;
+    border: none;
+}
+
+.bell { width: 18px; }
+.bell path { fill: rgb(45, 45, 45); }
+.dark .bell path { fill: rgb(230, 230, 230); }
+.button:hover { background-color: #2464ec; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);}
+.button:hover .bell { animation: bellRing 0.9s both; fill: rgb(230, 230, 230); }
+
+@keyframes bellRing {
+    0%,
+    100% { transform-origin: top; }
+    15% { transform: rotateZ(10deg); }
+    30% { transform: rotateZ(-10deg); }
+    45% { transform: rotateZ(5deg);}
+    60% { transform: rotateZ(-5deg);}
+    75% { transform: rotateZ(2deg); }
+}
+
+.button:active {
+    transform: scale(0.8);
+}
+
+
+
+/* THEME */
+.container {
+    --color: rgb(45, 45, 45);
+    --size: 22px;
+    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: var(--size);
+    user-select: none;
+    fill: var(--color);
+    transition: 0.3s;
+    border-radius: 50%; 
+}
+.dark .container{ --color: rgb(230, 230, 230); }
+.container:hover { 
+    background-color: #2464ec; 
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13); 
+    transform: scale(1.1);
+    --color: rgb(230, 230, 230);
+}
+.container .moon {
+    position: absolute;
+    animation: keyframes-fill .5s;
+}
+  
+.container .sun {
+    position: absolute;
+    display: none;
+    animation: keyframes-fill .5s;
+}
+    
+.container input:checked ~ .moon { display: none; }
+.container input:checked ~ .sun { display: block; }
+  
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+  
+
+@keyframes keyframes-fill {
+    0% {
+      transform: rotate(-360deg) scale(0);
+      opacity: 0;
+    }
+  
+    75% { transform: rotate(25deg); }
+}
+
+
+/* PDF */
+.pdfBtn {
+    background-color: #f0f0f0; /* bg-gray-200 */
+    padding: 0.6rem 0.9rem;
+    border-radius: 1rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.pdfBtn:hover {
+    transform: scale(1.1);
+}
+  

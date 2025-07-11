@@ -49,7 +49,6 @@ class ChargeForm extends AbstractType {
                     'Cartão de Crédito' => 'credit_card',
                     'Boleto' => 'boleto',
                     'PIX' => 'pix',
-                    'Transferência' => 'transfer'
                 ],
                 'attr' => ['class' => "$inputClass $sectionClass"]
             ])

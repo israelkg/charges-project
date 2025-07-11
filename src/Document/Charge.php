@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[MongoDB\Document(collection: "charges", repositoryClass: "App\Repository\ChargeRepository")]
 class Charge{
     public const PAYMENT_TYPES = ['cash', 'installment', 'subscription'];
-    public const PAYMENT_METHODS = ['credit_card', 'boleto', 'pix', 'trasnfer'];
+    public const PAYMENT_METHODS = ['credit_card', 'boleto', 'pix'];
     public const STATUSES = ['PENDENTE', 'PAGO', 'VENCIDO', 'CANCELADO'];
 
 
