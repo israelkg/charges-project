@@ -26,5 +26,4 @@ Thumbs.db
 .phpunit.cache/
 composer.phar
 .symfony
-README.MD
 ###< symfony/framework-bundle ###
