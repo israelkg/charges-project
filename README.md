@@ -1,4 +1,4 @@
-# 📚 Projeto: Cobranças (Symfony)
+# 📚 Projeto: Cobranças
 
 Este é um projeto de gerenciamento de Cobranças Online. Desenvolvido com o framework Symfony, focado em implementar funcionalidades de CRUD de cobranças, Exportação, Análise de Dados Financeiros e uma interface intuitiva e limpa.
 
