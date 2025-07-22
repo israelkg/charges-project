@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/mongodb-odm-bundle": "^5.3",
         "dompdf/dompdf": "^3.1",
+        "endroid/qr-code": "4.7",
         "mongodb/mongodb": "^2.0",
         "symfony/asset": "7.3.*",
         "symfony/console": "7.3.*",

@@ -186,4 +186,13 @@
 
     </div>
 </div>
+    {% block javascripts %}
+        <script>
+            function registrarClickWhatsapp(id) {
+                fetch(`/charges/${id}/click-whatsapp`, {
+                    method: 'POST'
+                });
+            }
+        </script>
+    {% endblock %}
 {% endblock %}

@@ -5,6 +5,8 @@ namespace App\Controller;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Document\Charge;
+use App\Service\QrCodeService;
+use App\Service\PixService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,25 +53,36 @@ class ExportController extends AbstractController{
     }
 
     #[Route('/charge/{id}/export/pdf', name: 'app_charge_export_pdf')]
-    public function exportPdf(Charge $charge): Response{
-        $options = new Options();
-        $options->set('defaultFont', 'Helvetica');
-        $dompdf = new Dompdf($options);
+    public function exportPdf(Charge $charge, QrCodeService $qrService, PixService $pixService): Response{
+
+        $valor = $charge->getAmount();
+        $nome = $charge->getCustomerName();
+        $cidade = 'Pato Branco'; 
+        $txid = 'TX' . $charge->getId();
+        $chave = 'sua-chave@pix.com.br';
+    
+        $payload = $pixService->gerarPayload($chave, $valor, $nome, $cidade, $txid);
+        $qrImage = $qrService->generateQrCode($payload); 
 
         $html = $this->renderView('pdfs/list_pdf.html.twig', [
             'charge' => $charge,
+            'payload' => $payload,
+            'qrcode_path' => $qrImage // ou embed direto como base64
         ]);
 
+        $options = new Options();
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-
 
         return new Response($dompdf->output(), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="cobranca_' . $charge->getId() . '.pdf"',
         ]);
     }
+
     #[Route('/dashboard/export/pdf', name: 'app_dashboard_export_pdf')]
     public function exportDashboardPdf(ManagerRegistry $doctrine, Security $security): Response{
         $user = $security->getUser();

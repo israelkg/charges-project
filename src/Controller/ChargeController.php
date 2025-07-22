@@ -88,6 +88,7 @@ class ChargeController extends AbstractController{
             throw $this->createNotFoundException('Cobrança não encontrada.');
         }
 
+
         return $this->render('charge/show.html.twig', [
             'charge' => $charge,
         ]);

@@ -113,6 +113,7 @@
 
         <div class="section">
             <h3>Detalhes da Cobrança</h3>
+
             <div class="row"><span class="label">Vencimento:</span> <span class="value">{{ charge.dueDate|date('d/m/Y') }}</span></div>
             <div class="row">
                 <span class="label">Status:</span>
@@ -123,7 +124,21 @@
                 }[charge.status] ?? '' %}
                 <span class="status {{ statusClass }}">{{ charge.status }}</span>
             </div>
+
+            <div class="row">
+                <h2>Detalhes da Cobrança</h2>
+                <p><strong>Cliente:</strong> {{ charge.customerName }}</p>
+                <p><strong>Valor:</strong> R$ {{ charge.amount|number_format(2, ',', '.') }}</p>
+
+                <h3>Pagamento via Pix</h3>
+                <p>Escaneie o QR Code abaixo:</p>
+                <img src="{{ qrcode_path }}" width="200" alt="QR Code Pix">
+                
+                <p><strong>Código Pix (copia e cola):</strong><br>{{ payload }}</p>
+            </div>
         </div>
+
+
 
         <div class="section">
             <h3>Serviço/Produto</h3>
